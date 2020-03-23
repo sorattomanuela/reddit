@@ -5,7 +5,7 @@ from accounts.models import User
 class SubRedditSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubReddit
-        fields = ['name', 'title', 'author', 'description', 'urlname',]
+        fields = ['name', 'title', 'description',]
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

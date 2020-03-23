@@ -37,6 +37,7 @@ ALLOWED_HOSTS = [
     '.us-west-2.elb.amazonaws.com',
     '.compute-1.amazonaws.com',
     'localhost',
+    '127.0.0.1',
 ]
 
 EC2_PRIVATE_IP = None

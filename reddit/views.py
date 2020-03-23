@@ -11,7 +11,8 @@ from reddit.serializers import UserSerializer
 class SubRedditViewSet(viewsets.ModelViewSet):
     queryset = SubReddit.objects.all()
     serializer_class = SubRedditSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    #permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    permission_classes = []
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -19,3 +20,4 @@ class SubRedditViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = []
