@@ -24,7 +24,7 @@ LOAD_ENVS_FROM_FILE='True'
 ENVIRONMENT='development'
 SECRET_KEY='#*=JungleDjangoBoilerplate=*#'
 DEFAULT_FROM_EMAIL='Boilerplate <boilerplate@jungledevs.com>'
-DATABASE_URL='postgres://postgres:postgres@localhost:5432/boilerplate'
+DATABASE_URL='postgres://postgres:postgres@localhost:5432/reddit'
 SENTRY_DSN='sentry_key'
 AWS_STORAGE_BUCKET_NAME='django-be'
 ```
