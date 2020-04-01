@@ -9,7 +9,7 @@ from accounts.models import User
 from reddit.serializers import UserSerializer
 
 class SubRedditViewSet(viewsets.ModelViewSet):
-    queryset = SubReddit.objects.all()
+    queryset = SubReddit.objects.all() #read a list of objects from a database
     serializer_class = SubRedditSerializer
     #permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     permission_classes = []

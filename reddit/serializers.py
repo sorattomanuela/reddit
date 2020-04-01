@@ -3,7 +3,7 @@ from reddit.models import SubReddit
 from accounts.models import User
 
 class SubRedditSerializer(serializers.ModelSerializer):
-    class Meta:
+    class Meta:                     #passing informaion of models and fields to ModelSerializer
         model = SubReddit
         fields = ['name', 'title', 'description',]
 
