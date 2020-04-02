@@ -1,11 +1,15 @@
 from rest_framework import serializers
-from reddit.models import SubReddit
+from reddit.models import Topic
 from accounts.models import User
 
-class SubRedditSerializer(serializers.ModelSerializer):
+class TopicSerializer(serializers.ModelSerializer):
     class Meta:                     #passing informaion of models and fields to ModelSerializer
-        model = SubReddit
-        fields = ['name', 'title', 'description',]
+        model = Topic
+        fields = ['name', 'title', 'description', 'url', 'slug', 'topic_url',]
+        lookup_field = 'slug'
+        extra_kwargs = {
+            'url': {'lookup_field':'slug'}
+        }
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
