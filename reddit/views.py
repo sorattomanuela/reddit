@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
 # Create your views here.
-from reddit.models import Topic
-from reddit.serializers import TopicSerializer
+from reddit.models import Topic, Post, Comment
+from reddit.serializers import TopicSerializer, PostSerializer, CommentSerializer
 from reddit.permissions import IsAuthorOrReadOnly
 from rest_framework import viewsets, permissions
 from accounts.models import User
@@ -14,6 +14,22 @@ class TopicViewSet(viewsets.ModelViewSet):
     #permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     permission_classes = []
     lookup_field = 'slug'
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = []
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = []
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
