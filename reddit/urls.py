@@ -1,11 +1,16 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+from rest_framework_nested import routers
 from reddit import views
 
-router = DefaultRouter() #solve the urls forward path
-router.register(r'topic', views.TopicViewSet)
-router.register(r'users', views.UserViewSet)
+
+router = routers.DefaultRouter()
+router.register(r'topics', views.TopicViewSet, basename='topic')
+router.register(r'users', views.UserViewSet, basename='user')
+
+topics_router = routers.NestedSimpleRouter(router, r'topics', lookup='topic')
+topics_router.register(r'posts', views.PostViewSet, basename='post')
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('', include(topics_router.urls)),
 ]

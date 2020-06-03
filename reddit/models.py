@@ -1,6 +1,8 @@
 from django.db import models
 
 # Create your models here.
+from django.utils.text import slugify
+
 from helpers.models import TimestampModel
 
 
@@ -9,7 +11,11 @@ class Topic(TimestampModel):
     title = models.CharField(max_length=100, blank=True, default='')
     author = models.ForeignKey('accounts.User', related_name='topics', on_delete=models.CASCADE) #related_name to specifies the name of reverse relation from the user back to model
     description = models.TextField(default='categories')
-    urlname = models.SlugField(max_length=100, db_index=True, allow_unicode=False)
+    urlname = models.SlugField(max_length=100)
+
+    def save(self, *args, **kwargs):
+        self.urlname = slugify(self.title)
+        super().save(*args, **kwargs)
 
 
     class Meta:

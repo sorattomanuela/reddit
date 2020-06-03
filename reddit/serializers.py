@@ -2,19 +2,22 @@ from rest_framework import serializers
 from reddit.models import Topic, Post, Comment
 from accounts.models import User
 
-class TopicSerializer(serializers.ModelSerializer):
-    class Meta:                     #passing information of models and fields to ModelSerializer
-        model = Topic
-        fields = ['name', 'title', 'description', 'url', 'slug', 'topic_url',]
-        lookup_field = 'slug'
-        extra_kwargs = {
-            'url': {'lookup_field':'slug'}
-        }
-
 class PostSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source='author.username')
+    topic = serializers.ReadOnlyField(source='topic.urlname')
     class Meta:
         model = Post
         fields = ['title', 'content', 'author', 'topic',]
+        read_only_fields = ['author', 'topic',]
+
+
+class TopicSerializer(serializers.ModelSerializer):
+    posts = PostSerializer(many=True)
+    class Meta:                     #passing information of models and fields to ModelSerializer
+        model = Topic
+        fields = ['name', 'title', 'description', 'urlname', 'posts',]
+        lookup_field = 'urlname'
+        read_only_fields = ['urlname', 'posts',]
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:

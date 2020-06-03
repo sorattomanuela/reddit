@@ -1,19 +1,15 @@
-from django.shortcuts import render
-
-# Create your views here.
 from reddit.models import Topic, Post, Comment
-from reddit.serializers import TopicSerializer, PostSerializer, CommentSerializer
 from reddit.permissions import IsAuthorOrReadOnly
-from rest_framework import viewsets, permissions
+from reddit.serializers import TopicSerializer, PostSerializer, CommentSerializer, UserSerializer
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework import viewsets
 from accounts.models import User
-from reddit.serializers import UserSerializer
 
 class TopicViewSet(viewsets.ModelViewSet):
-    queryset = Topic.objects.all() #read a list of objects from a database
+    queryset = Topic.objects.all()                              #read a list of objects from a database
     serializer_class = TopicSerializer
-    #permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
-    permission_classes = []
-    lookup_field = 'slug'
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    lookup_field = 'urlname'
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -21,20 +17,22 @@ class TopicViewSet(viewsets.ModelViewSet):
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        topic_urlname = self.kwargs.get('topic_urlname')
+        topic = Topic.objects.filter(urlname=topic_urlname).first()
+        serializer.save(author=self.request.user, topic=topic)
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = []
+    permission_classes = [AllowAny,]
