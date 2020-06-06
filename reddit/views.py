@@ -30,5 +30,9 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        post_id = self.kwargs.get('post_pk')
+        post = Post.objects.filter(id=post_id).first()
+        topic = post.topic
+        serializer.save(author=self.request.user, topic=topic, post=post)
+
 
