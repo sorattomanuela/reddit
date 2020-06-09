@@ -32,7 +32,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         post_id = self.kwargs.get('post_pk')
         post = Post.objects.filter(id=post_id).first()
-        topic = post.topic
+        topic = post.topic                              #grabing list of objects from topic
         serializer.save(author=self.request.user, topic=topic, post=post)
 
 
